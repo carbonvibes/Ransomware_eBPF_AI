@@ -1,0 +1,17 @@
+#include <asm-generic/fcntl.h>
+
+config = {
+    stack_mode=perf;
+    max_strlen=128
+}
+
+tracepoint:syscalls:sys_enter_openat /uid == 1000 && comm!="gmain" && comm!="avahi-daemon" && comm != "bpftrace" && comm!="pool-tracker-ex" && comm!="gdbus" && comm!="git" && comm!="zsh" && comm !="pipewire-media-" && comm!="PK-Backend" && comm!="https" && comm != "sshd"/
+{
+    // Flags of interest
+
+    if (args->flags & O_CREAT) {
+	//  printf("%s\n",str(args->filename));
+        printf("%d@@%s\n",pid, str(args->filename));
+    }
+
+}
