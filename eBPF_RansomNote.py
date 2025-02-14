@@ -10,8 +10,9 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import sys
 
-location='location of the model.pkl eg. /home/parallels/model.pkl' # replace this with the actual location in your disk
-with open(location, 'rb') as f:
+location='/home/parallels/model.pkl'  # replace this with the actual location in your disk
+
+with open('/home/parallels/model.pkl', 'rb') as f:
     vectorizer_tfidf, selector, rf_model = pickle.load(f)
 
 nltk.download('punkt', quiet=True)
@@ -41,7 +42,7 @@ def preprocess_text(text):
         return []
 
 # Prediction function
-def predict_from_text(custom_text, pid):
+def predict_from_text(custom_text, pid, comm):
     processed_text = preprocess_text(custom_text)
     joined_text = ' '.join(processed_text)
 
@@ -56,14 +57,14 @@ def predict_from_text(custom_text, pid):
     prediction = rf_model.predict(tfidf_features)[0]
 
     if prediction == 1:
-        print(f"Ransomware detected in process {pid}")
+        print(f"Ransomware process {pid} {comm} detected")
         try:
             subprocess.run(["sudo", "kill", "-9", str(pid)], check=True)
-            print(f"Process {pid} has been killed.")
+            print(f"Process {pid} {comm} has been killed.")
         except subprocess.CalledProcessError as e:
-            print(f"Error killing process {pid}: {e}")
+            print(f"Error killing process {pid} {comm}: {e}")
     else:
-        print(f"Process {pid} is benign.")
+        print(f"Process {pid} {comm} is benign.")
 
 # BPF program
 bpf_text = """
@@ -155,7 +156,7 @@ def print_event(cpu, data, size):
         return
 
     if content:
-        predict_from_text(content, pid)
+        predict_from_text(content, pid, comm)
 
 b["events"].open_perf_buffer(print_event)
 
