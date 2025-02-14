@@ -53,7 +53,7 @@ nltk.download('wordnet')
 ```
 
 ### Step 6: Place the ML Model in the Correct Location
-Ensure that the pre-trained `model.pkl` file is placed in `/home/parallels/`.
+Ensure that the pre-trained `model.pkl` file is downloaded and change the `location` variable accordingly.
 
 ## Running the Program
 To start monitoring for ransomware activity, run:
