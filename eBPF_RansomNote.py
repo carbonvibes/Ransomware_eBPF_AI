@@ -10,7 +10,8 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import sys
 
-with open('/home/parallels/model.pkl', 'rb') as f:
+location='location of the model.pkl eg. /home/parallels/model.pkl'
+with open(location, 'rb') as f:
     vectorizer_tfidf, selector, rf_model = pickle.load(f)
 
 nltk.download('punkt', quiet=True)
