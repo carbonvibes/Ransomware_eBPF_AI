@@ -1,0 +1,23 @@
+#include <asm-generic/fcntl.h>
+
+config = {
+    stack_mode=perf;
+    max_strlen=128
+}
+
+
+kfunc:vmlinux:vfs_open /comm != "*.lck" && uid == 1000 && comm!="gmain" && comm!="avahi-daemon" && comm != "bpftrace" && comm!="pool-tracker-ex">
+{
+    // Extract the file flags
+    $flags = args->file->f_flags;
+
+    // Check if the O_CREAT flag is set
+    if ($flags & O_CREAT) {
+        // Extract the file name
+        $filename = str(args->path->dentry->d_name.name);
+
+        // Print the relevant information
+       // printf("File opened with O_CREAT: %s by process %s (PID %d)\n", $filename, comm, pid);
+        printf("%d@@%s\n",pid, $filename);
+    }
+}
