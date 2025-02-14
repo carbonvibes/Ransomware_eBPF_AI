@@ -10,7 +10,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import sys
 
-location='location of the model.pkl eg. /home/parallels/model.pkl'
+location='location of the model.pkl eg. /home/parallels/model.pkl' # replace this with the actual location in your disk
 with open(location, 'rb') as f:
     vectorizer_tfidf, selector, rf_model = pickle.load(f)
 
