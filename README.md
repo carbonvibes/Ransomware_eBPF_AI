@@ -1,8 +1,9 @@
 # Ransomware Detection using eBPF and Machine Learning
-
+<div align='justify'>
 This project leverages **eBPF (Extended Berkeley Packet Filter)** to monitor file operations and a **machine learning model** to detect ransomware behavior in real-time. When ransomware activity is detected, the process is automatically terminated.
 
 ## Abstract
+<div align='justify'>
 In this work, we propose a two-phased approach to detect and deter ransomware in real-time. We leverage the capabilities of eBPF (Extended Berkeley Packet Filter) and artificial intelligence (AI) to develop proactive and reactive methods. In the first phase, we utilize signature-based detection, where we employ custom eBPF programs to trace the execution of new processes and perform hash-based analysis against a known ransomware dataset. In the second, we employ a behavior-based technique that focuses on monitoring the process activities using a custom eBPF program and the creation of ransom notes — a prominent indicator of ransomware activity through the use of Natural Language Processing (NLP). By leveraging eBPF’s low-level tracing capabilities and integrating NLP-based machine learning algorithms, our solution achieves an impressive 99.79% accuracy in identifying ransomware incidents within a few seconds on the onset of zero-day attacks.
 
 This work is part of **LeARN: Leveraging eBPF and AI for Ransomware Nose Out** and is published in **COMSNETS'25 CSP proceedings**. You can take a look at the attached research paper for more details.
