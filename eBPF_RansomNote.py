@@ -22,23 +22,39 @@ nltk.download('wordnet', quiet=True)
 
 def preprocess_text(text):
     if isinstance(text, str):
+        # Tokenization
         tokens = nltk.word_tokenize(text.lower())
+
+        #Punctuation removal
         translator = str.maketrans('', '', string.punctuation)
         tokens = [token.translate(translator) for token in tokens]
+
+        # Stop word removal
         stop_words = set(stopwords.words('english'))
         tokens = [token for token in tokens if token not in stop_words]
+
+        #Lemmatization
         lemmatizer = WordNetLemmatizer()
         tokens = [lemmatizer.lemmatize(token) for token in tokens]
+        
         return tokens
+        
     return []
 
+# Prediction function
 def predict_from_text(custom_text, pid, comm):
     processed_text = preprocess_text(custom_text)
     joined_text = ' '.join(processed_text)
+    
+    # Feature extraction
     tfidf_features = vectorizer_tfidf.transform([joined_text])
+
+    # Chi-Squared transformation (if applicable)
     if selector is not None:
         tfidf_features = selector.transform(tfidf_features)
     prediction = rf_model.predict(tfidf_features)[0]
+
+    # Prediction
     if prediction == 1:
         print(f"Ransomware process {pid} {comm} detected")
         try:
@@ -47,6 +63,7 @@ def predict_from_text(custom_text, pid, comm):
             print(f"Process {pid} {comm} has been killed.")
         except subprocess.CalledProcessError as e:
             print(f"Error killing process {pid} {comm}: {e}")
+            
     else:
         print(f"Process {pid} {comm} is benign.")
 
@@ -93,6 +110,9 @@ TRACEPOINT_PROBE(syscalls, sys_enter_openat)
 """
 
 b = BPF(text=bpf_text)
+
+#b.attach_tracepoint(tp="syscalls:sys_enter_openat", fn_name="syscalls__sys_enter_openat")
+
 TASK_COMM_LEN = 16
 NAME_MAX = 255
 
@@ -105,13 +125,17 @@ class Data(ctypes.Structure):
 
 print("Tracing... Press Ctrl-C to end.")
 
+# Event callback
 def print_event(cpu, data, size):
     event = ctypes.cast(data, ctypes.POINTER(Data)).contents
+    
     pid = event.pid
     filename = event.filename.decode('utf-8', 'replace')
     comm = event.comm.decode('utf-8', 'replace')
-    
+
+    # Read the contents of the file (if possible)
     try:
+        # Resolve relative paths
         if not os.path.isabs(filename):
             proc_cwd = f"/proc/{pid}/cwd"
             cwd = os.readlink(proc_cwd) if os.path.exists(proc_cwd) else '/'
@@ -121,12 +145,15 @@ def print_event(cpu, data, size):
         
         with open(filename_full, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
+            
     except FileNotFoundError:
         print(f"File {filename_full} not found. Skipping...")
         return
+        
     except PermissionError:
         print(f"Permission denied: {filename_full}. Skipping...")
         return
+        
     except Exception as e:
         print(f"Could not read file {filename}: {e}")
         return
@@ -135,6 +162,7 @@ def print_event(cpu, data, size):
         predict_from_text(content, pid, comm)
 
 b["events"].open_perf_buffer(print_event, page_cnt=64)
+
 try:
     while True:
         b.perf_buffer_poll()
