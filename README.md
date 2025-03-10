@@ -36,30 +36,47 @@ Install `bpftrace` to facilitate eBPF debugging and tracing.
 sudo apt-get install -y bpftrace
 ```
 
-### Step 4: Install Python Dependencies
-Ensure you have Python 3 and pip installed. Then, install the necessary Python libraries.
+### Step 4: Set Up a Python Virtual Environment
+It is recommended that a virtual environment for Python dependencies be created while using system-installed eBPF tools.
 
 ```bash
-pip install numpy scikit-learn nltk pickle5
+python3 -m venv bcc_env --system-site-packages
+source bcc_env/bin/activate
 ```
 
-### Step 5: Download NLTK Resources
+
+### Step 5: Install Python Dependencies
+Ensure you have Python 3 and pip installed. Then, install the necessary Python libraries inside the virtual environment.
+
+```bash
+pip install numpy scikit-learn nltk
+```
+
+### Step 6: Download NLTK Resources
+First run the below bash command before downloading the ntlk resources, to ensure that nltk resources are downloaded in the virtual environment.
+
+```bash
+sudo $(which python)
+```
 
 ```python
 import nltk
+
+nltk.download('punkt_tab')
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 ```
 
-### Step 6: Place the ML Model in the Correct Location
+### Step 7: Place the ML Model in the Correct Location
 Ensure that the pre-trained `model.pkl` file is downloaded and change the `location` variable accordingly.
 
 ## Running the Program
 To start monitoring for ransomware activity, run:
 
 ```bash
-sudo python3 ransomware_detection.py
+source bcc_env/bin/activate
+sudo $(which python) ransomware_detection.py
 ```
 
 ### Expected Output
