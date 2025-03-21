@@ -76,7 +76,7 @@ To start monitoring for ransomware activity, run:
 
 ```bash
 source bcc_env/bin/activate
-sudo $(which python) eBPF_Ransomnote.py
+sudo $(which python) eBPF_RansomNote.py
 ```
 
 ### Expected Output
