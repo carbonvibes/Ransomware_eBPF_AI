@@ -49,7 +49,7 @@ source bcc_env/bin/activate
 Ensure you have Python 3 and pip installed. Then, install the necessary Python libraries inside the virtual environment.
 
 ```bash
-pip install numpy scikit-learn nltk
+pip install numpy scikit-learn nltk pandas
 ```
 
 ### Step 6: Download NLTK Resources
