@@ -10,11 +10,9 @@
 8. **Rhysidia** — `-d /path/`  
 9. **Kuiper version B** — `--help`  
 10. **Conti** — `--path /path/`  
-11. **blackbasta** — use `sudo ./blackbasta.elf`  
-    *Only encrypts `/vmfs/volume/` directory, so make sure that exists*  
+11. **blackbasta** — use `sudo ./blackbasta.elf`  *Only encrypts `/vmfs/volume/` directory, so make sure that exists*  
 12. **lockbit** — `-i /path/`  
-13. **MarioLocker** — `/path/`  
-    *Note: It is a ransomware targeting ESXi servers; only encrypts `.vsdm` files*  
+13. **MarioLocker** — `/path/`  *Note: It is a ransomware targeting ESXi servers; only encrypts `.vsdm` files*  
 14. **Conti2** — `--path /path/`  
 15. **Fog** — *Requires Password*  
 16. **Interlock** — *Requires Password*
