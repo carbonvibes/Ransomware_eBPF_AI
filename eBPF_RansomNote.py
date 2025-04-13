@@ -96,13 +96,13 @@ TRACEPOINT_PROBE(syscalls, sys_enter_openat)
     if (comm == NULL)
         return 0;
 
-
+5
     // Check if O_CREAT flag is set
     if ((args->flags & O_CREAT) == 0)
         return 0;
 
-    // Copy filename
-    bpf_probe_read_user_str(&data.filename, sizeof(data.filename), args->filename);
+    // Copy filename (replace the below line with bpf_probe_read() if the kernel version is < 5.5)
+    bpf_probe_read_user_str(&data.filename, sizeof(data.filename), args->filename); 
 
     events.perf_submit(args, &data, sizeof(data));
     return 0;
