@@ -96,7 +96,6 @@ TRACEPOINT_PROBE(syscalls, sys_enter_openat)
     if (comm == NULL)
         return 0;
 
-5
     // Check if O_CREAT flag is set
     if ((args->flags & O_CREAT) == 0)
         return 0;
